@@ -357,7 +357,7 @@ function evaluate(x){
   const toRead=x.books.filter(b=>!b.read).length, ready=x.books.filter(b=>b.read&&!b.shelved).length;
   if(ready)tips.push(`有 ${ready} 本已讀完的書等著上架，每本可賺 ${SHELF_REWARD} 金幣。`);
   else if(toRead)tips.push(`館藏裡還有 ${toRead} 本書沒讀，讀完打勾就能上架賺金幣。`);
-  else if(!x.books.length)tips.push("先在書區裡請 AI 推薦書單列入館藏，讀完就能上架。");
+  else if(!x.books.length)tips.push("先在書區裡打開推薦書單，勾幾本列入館藏，讀完就能上架。");
   if(!tips.length)tips.push("配置很平衡，讀者會很喜歡這裡！");
   return{visitors,capacity,stars,fits,tips};
 }
@@ -588,10 +588,55 @@ function counter3D(type){
       box(.7,.08,.3,mat("#9aa5ab"),0,1.05,.45,g);g.position.set(-3+i*3,0,1);s.add(g)}}
 }
 
-/* ===== AI 書單 ===== */
+/* ===== 內建推薦書單（不需要 AI；書名與作者已對照書店書目確認） ===== */
+const BOOKLIST={
+  picture:{name:"繪本童書",books:[["好餓的毛毛蟲","艾瑞・卡爾"],["好忙的蜘蛛","艾瑞・卡爾"],["猜猜我有多愛你","山姆・麥克布雷尼"],["小黑魚","李歐・李奧尼"],["小房子","維吉尼亞・李・巴頓"],["南瓜湯","海倫・庫柏"],["子兒，吐吐","李瑾倫"],["第一次出門買東西","筒井賴子"],["我變成一隻噴火龍了！","賴馬"],["鱷魚怕怕牙醫怕怕","五味太郎"],["你很特別","陸可鐸"]]},
+  family:{name:"親子共讀",books:[["爺爺一定有辦法","菲比・吉爾曼"],["是誰嗯嗯在我頭上","維爾納・霍爾茨瓦爾特"],["菲菲生氣了","莫莉・卞"],["大猩猩","安東尼・布朗"],["喬瑟夫有件舊外套","席姆斯・塔貝克"],["母雞蘿絲去散步","佩特・哈群斯"],["大象艾瑪","大衛・麥基"],["威廉的洋娃娃","夏洛特・佐羅托"],["我的媽媽真麻煩","芭蓓蒂・柯爾"],["青蛙和蟾蜍好朋友","阿諾・羅北兒"],["晚安，猩猩","佩琪・芮士曼"]]},
+  comics:{name:"漫畫動漫",books:[["灌籃高手","井上雄彥"],["名偵探柯南","青山剛昌"],["航海王","尾田榮一郎"],["鬼滅之刃","吾峠呼世晴"],["哆啦A夢","藤子・F・不二雄"],["進擊的巨人","諫山創"],["鋼之鍊金術師","荒川弘"],["間諜家家酒","遠藤達哉"],["葬送的芙莉蓮","山田鐘人"],["排球少年!!","古舘春一"],["蟲師","漆原友紀"],["用九柑仔店","阮光民"],["守娘","小峱峱"]]},
+  nature:{name:"自然生態",books:[["寂靜的春天","瑞秋・卡森"],["所羅門王的指環","康拉德・勞倫茲"],["沙郡年紀","奧爾多・李奧帕德"],["樹的祕密生命","彼得・渥雷本"],["討海人","廖鴻基"],["鯨生鯨世","廖鴻基"],["種樹的男人","讓・紀沃諾"],["失去山林的孩子","理查・洛夫"],["物種起源","達爾文"],["野狗之丘","劉克襄"],["老鷹的故事","沈振中"]]},
+  science:{name:"科普科技",books:[["時間簡史","史蒂芬・霍金"],["大設計","史蒂芬・霍金"],["自私的基因","理查・道金斯"],["槍炮、病菌與鋼鐵","賈德・戴蒙"],["別鬧了，費曼先生","理查・費曼"],["萬物簡史","比爾・布萊森"],["基因：人類最親密的歷史","辛達塔・穆克吉"],["萬病之王","辛達塔・穆克吉"],["如果這樣，會怎樣？","蘭德爾・門羅"],["數學女孩","結城浩"],["從一到無限大","喬治・加莫夫"]]},
+  local:{name:"在地歷史",books:[["臺灣通史","連橫"],["臺灣歷史圖說","周婉窈"],["少年臺灣史","周婉窈"],["被誤解的臺灣史","駱芬美"],["台灣人四百年史","史明"],["台灣：苦悶的歷史","王育德"],["被出賣的台灣","葛超智"],["福爾摩沙三族記","陳耀昌"],["傀儡花","陳耀昌"],["無法送達的遺書","林易澄、林傳凱、胡淑雯"]]},
+  food:{name:"飲食生活",books:[["培梅食譜","傅培梅"],["雅舍談吃","梁實秋"],["隨園食單","袁枚"],["廚房裡的人類學家","莊祖宜"],["其實大家都想做菜","莊祖宜"],["鹽、油、酸、熱","莎敏・納斯瑞特"],["食物與廚藝","哈洛德・馬基"],["臺灣味道","焦桐"],["怦然心動的人生整理魔法","近藤麻理惠"]]},
+  lit:{name:"文學小說",books:[["百年孤寂","馬奎斯"],["挪威的森林","村上春樹"],["小王子","聖修伯里"],["傲慢與偏見","珍・奧斯汀"],["老人與海","海明威"],["解憂雜貨店","東野圭吾"],["追風箏的孩子","卡勒德・胡賽尼"],["一九八四","喬治・歐威爾"],["異鄉人","卡繆"],["紅樓夢","曹雪芹"],["臺北人","白先勇"],["傾城之戀","張愛玲"],["殺夫","李昂"],["家變","王文興"]]},
+  translit:{name:"翻譯文學",books:[["我的名字叫紅","奧罕・帕慕克"],["大亨小傳","費茲傑羅"],["罪與罰","杜斯妥也夫斯基"],["變形記","卡夫卡"],["麥田捕手","沙林傑"],["人間失格","太宰治"],["雪國","川端康成"],["那不勒斯故事","艾琳娜・斐蘭德"],["長日將盡","石黑一雄"],["82年生的金智英","趙南柱"],["素食者","韓江"],["蒼蠅王","威廉・高汀"]]},
+  art:{name:"藝術設計",books:[["藝術的故事","宮布利希"],["觀看的方式","約翰・伯格"],["原研哉的設計","原研哉"],["梵谷傳","伊爾文・史東"],["美學四講","李澤厚"],["向左走・向右走","幾米"],["歐文字體１：基礎知識與活用方法","小林章"],["漢寶德談美","漢寶德"]]},
+  health:{name:"醫療健康",books:[["凝視死亡","葛文德"],["一位外科醫師的修煉","葛文德"],["當呼吸化為空氣","保羅・卡拉尼提"],["為什麼要睡覺？","馬修・沃克"],["端粒效應","伊莉莎白・布雷克本"],["運動改造大腦","約翰・瑞提"],["心靈的傷，身體會記住","貝塞爾・范德寇"],["史丹佛大學「黃金90分鐘」睡眠法","西野精治"],["身體","比爾・布萊森"]]},
+  lang:{name:"外語學習",books:[["大家的日本語 初級Ⅰ 改訂版",""],["我的第一本日語課本","奧村裕次、林旦妃"],["我的第一本韓語課本","吳承恩"],["英文寫作的魅力","約瑟夫・威廉斯"],["語言本能","史迪芬・平克"],["空中英語教室",""],["大家說英語",""],["英文的奧妙","瑪莉・諾里斯"],["大家學標準日本語：初級本","出口仁"],["常春藤解析英語",""]]},
+  teen:{name:"青少年",books:[["哈利波特(1)神秘的魔法石","J.K.羅琳"],["奇蹟男孩","R.J.帕拉秋"],["少年Pi的奇幻漂流","楊・馬泰爾"],["蘇菲的世界","喬斯坦・賈德"],["飢餓遊戲","蘇珊・柯林斯"],["偷書賊","馬格斯・朱薩克"],["記憶傳承人","露薏絲・勞瑞"],["安妮日記","安妮・法蘭克"],["夏之庭","湯本香樹實"],["少年小樹之歌","佛瑞斯特・卡特"],["晴天就去圖書館吧","綠川聖司"],["魯冰花","鍾肇政"]]},
+  magazine:{name:"雜誌區",books:[["天下雜誌",""],["商業周刊",""],["康健雜誌",""],["親子天下",""],["小牛頓",""],["張老師月刊",""],["科學人雜誌",""],["漢聲雜誌",""],["Live互動英語",""]]},
+  localauthor:{name:"在地作家",books:[["天橋上的魔術師","吳明益"],["單車失竊記","吳明益"],["臺灣漫遊錄","楊双子"],["花甲男孩","楊富閔"],["鬼地方","陳思宏"],["亞細亞的孤兒","吳濁流"],["送報伕","楊逵"],["孽子","白先勇"],["看海的日子","黃春明"],["兒子的大玩偶","黃春明"],["浪淘沙","東方白"],["寒夜","李喬"]]},
+  popular:{name:"熱門好書",books:[["原子習慣","詹姆斯・克利爾"],["被討厭的勇氣","岸見一郎"],["人類大歷史","哈拉瑞"],["解憂雜貨店","東野圭吾"],["蛤蟆先生去看心理師","羅伯・狄保德"],["小王子","聖修伯里"],["天橋上的魔術師","吳明益"],["心靈的傷，身體會記住","貝塞爾・范德寇"],["我可能錯了","比約恩・納提科・林德布勞"],["歡迎光臨夢境百貨","李美芮"],["富爸爸，窮爸爸","羅勃特・T・清崎"],["刻意練習","安德斯・艾瑞克森"]]},
+};
+const BOOK_KW=[["localauthor",["在地作家","台灣文學","臺灣文學","本土作家","台灣作家","臺灣作家"]],["translit",["翻譯"]],
+  ["family",["親子","共讀","育兒","床邊"]],["picture",["繪本","童書","兒童","橋梁書","幼兒"]],["comics",["漫畫","動漫","動畫","圖像小說"]],["teen",["青少年","少年","青春"]],
+  ["magazine",["雜誌","期刊"]],["lang",["外語","外文","語言","英語","英文","日語","日文","韓語","韓文"]],
+  ["nature",["自然","生態","動物","植物","鳥","昆蟲","環境","森林","海洋","登山"]],["science",["科普","科學","科技","數學","天文","宇宙","物理","化學","程式","電腦"]],
+  ["local",["歷史","臺灣史","台灣史","地方","文史","鄉土"]],["food",["飲食","料理","食譜","烹飪","美食","烘焙","生活"]],
+  ["art",["藝術","設計","美術","建築","攝影","字體"]],["health",["醫療","健康","醫學","醫者","照護","失智","長照","運動","睡眠","心理"]],
+  ["lit",["文學","小說","經典","詩","散文","推理"]],["popular",["新書","暢銷","熱門","大字"]]];
+const ZONE_SUGG={picture:["親子共讀","繪本區","橋梁書","知識繪本","雙語繪本"],comics:["少年漫畫","少女漫畫","台灣漫畫","圖像小說","動漫畫冊"],
+  nature:["野鳥觀察","昆蟲世界","海洋生態","植物圖鑑","登山步道"],science:["天文宇宙","數學好好玩","程式設計","生命科學","科普入門"],
+  local:["臺灣史","地方文史","在地作家","老照片","廟宇與節慶"],food:["食譜","飲食文學","烘焙點心","蔬食料理","生活整理"],
+  lit:["翻譯文學","在地作家","推理小說","詩集","散文"],art:["設計","建築","攝影","美術史","字體與排版"],
+  health:["睡眠","運動健身","心理健康","長照與失智","醫者故事"],lang:["英語學習","日語學習","韓語學習","外語雜誌","雙語繪本"]};
+const ZONE_SUGG_ANY=["新書區","翻譯文學","親子共讀","青少年","在地作家"];
+const kwCat=name=>(BOOK_KW.find(([,ks])=>ks.some(k=>String(name||"").includes(k)))||[])[0]||null;
+function bookCatFor(sp){
+  const own=BOOKLIST[sp.key]?sp.key:kwCat(sp.name);if(own)return{cat:own,fallback:false};
+  const th=BOOKLIST[L.theme.key]?L.theme.key:kwCat(L.theme.name);return{cat:th||"popular",fallback:true};
+}
+const bkUrl=t=>`https://search.books.com.tw/search/query/key/${encodeURIComponent(t)}/cat/all`;
+
+/* ===== 書單（有 AI 用 AI，沒有就用內建推薦書單） ===== */
+function builtinSuggest(sp){
+  const {cat,fallback}=bookCatFor(sp),have=new Set(L.books.map(b=>b.title));
+  const items=BOOKLIST[cat].books.map(([title,author])=>({title,author,why:"",pick:false,have:have.has(title)}));
+  sugg[sp.key]={state:"ok",builtin:true,items,note:fallback?`還沒有「${sp.name}」的專屬書單，先列出「${BOOKLIST[cat].name}」的推薦書；也可以在下面自己加一本。`:""};
+  render();
+}
 async function suggest(key){
   const sp=specOf(key);if(!sp)return;
-  if(!sample){sugg[key]={state:"err",msg:"這個檢視無法使用 AI 建議書單。請在 claude.ai 開啟此頁面。"};return render()}
+  if(!sample)return builtinSuggest(sp);
   sugg[key]={state:"loading"};render();
   const prompt=`你是臺灣公共圖書館的館藏採購館員。這座圖書館位於${LOCS[L.loc].name}旁，館藏特色是「${L.theme.name}」，現在要充實其中的「${sp.name}」書區。
 請推薦 8 本適合放進這個書區、也符合館藏特色的書，以臺灣買得到的繁體中文書為主（可包含經典翻譯書），兼顧入門與深入。
@@ -610,7 +655,7 @@ async function suggest(key){
 }
 
 async function suggestZones(){
-  if(!sample){sugg.__zones={state:"err",msg:"這個檢視無法使用 AI。請在 claude.ai 開啟此頁面。"};return render()}
+  if(!sample){sugg.__zones={state:"ok",items:ZONE_SUGG[L.theme.key]||ZONE_SUGG_ANY};return render()}
   sugg.__zones={state:"loading"};render();
   try{
     const res=await sample.json(`你是臺灣公共圖書館的館員。一座位於${LOCS[L.loc].name}旁的圖書館，館藏特色是「${L.theme.name}」。請建議 5 個這個特色底下的專屬書區名稱（每個 2 到 6 個字，例如「翻譯文學」「漫畫區」）。只回覆 JSON 字串陣列。`,{modelTier:"quick"});
@@ -681,7 +726,7 @@ desc 寫 30 字內的中性書目簡介（不要提到書區名稱或是否該�
       items=(Array.isArray(res)?res:[]).filter(x=>x&&x.title&&(x.zone===null||names.has(x.zone))).slice(0,BATCH).map(x=>({title:String(x.title),author:String(x.author||""),year:x.year||"",desc:String(x.desc||""),zone:x.zone?zones.find(z=>z.name===x.zone).key:null,why:String(x.why||""),fresh:true}));
       shift.src="ai";
     }catch(e){shift.err=e?.code==="not_granted"?"你沒有允許這個頁面使用 AI，改用你館藏裡的書練習分類。":"新書目錄調不到，改用你館藏裡的書練習分類。"}
-  }else shift.err="這個檢視無法使用 AI，改用你館藏裡的書練習分類。";
+  }else shift.err="今天用你館藏裡的書練習分類。";
   if(items.length<3){
     const pool=shuffle(L.books.filter(b=>b.spec)).slice(0,BATCH);
     items=pool.map(b=>({title:b.title,author:b.author||"",year:"",desc:"館藏重新整理：確認這本書放在正確的書區。",zone:b.spec===L.theme.key&&L.specs.length?null:b.spec,why:`目前登記在「${specOf(b.spec)?.name||""}」。`,fresh:false,id:b.id}));
@@ -727,7 +772,7 @@ function renderShift(){
     <section class="panel pop">
       <div class="row" style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="hint">第 ${s.i+1} / ${s.items.length} 本</span><span class="hint">館藏特色：${esc(L.theme.name)}</span></div>
       <article class="catcard"><b>${esc(it.title)}</b><span>${esc(it.author)}${it.year?`・${esc(it.year)}`:""}</span><p>${esc(it.desc)}</p>
-        <a href="https://search.books.com.tw/search/query/key/${encodeURIComponent(it.title)}/cat/all" target="_blank" rel="noopener">博客來書目 ↗</a></article>
+        <span><a href="https://search.books.com.tw/search/query/key/${encodeURIComponent(it.title)}/cat/all" target="_blank" rel="noopener">博客來書目 ↗</a> <a href="${tpml(it.title)}" target="_blank" rel="noopener" data-copy="${esc(it.title)}">北市圖館藏 ↗</a></span></article>
       <div class="answers">${zones.map((z,i)=>`<button class="btn ${s.fb?(z.key===chosenRight?"right":"dim"):""}" data-ans="${i}" ${s.fb?"disabled":""} style="border-left:5px solid ${z.color}">放進「${esc(z.name)}」</button>`).join("")}
         <button class="btn ${s.fb?(chosenRight===null?"right":"dim"):""}" data-ans="-1" ${s.fb?"disabled":""}>不列入館藏</button></div>
       ${s.fb?`<p class="note ${s.fb.ok?"":"bad"}">${esc(s.fb.text)}${s.fb.ok?` +${s.fb.gain} 金幣${s.streak>1?`（連續 ${s.streak} 本）`:""}`:""}${s.fb.added?"・已列入館藏":""}</p>
@@ -771,10 +816,11 @@ function specBlock(sp){
   let inner="";
   if(sg?.state==="loading")inner=`<p class="hint">正在請 AI 挑選「${esc(sp.name)}」的書單…</p>`;
   else if(sg?.state==="err")inner=`<p class="note bad">${esc(sg.msg)}</p>`;
-  else if(sg?.state==="ok")inner=`<div class="sugg">${sg.items.map((it,i)=>`<label><input type="checkbox" data-pick="${esc(sp.key)}" data-i="${i}" ${it.pick?"checked":""} ${it.have?"disabled":""}><span><b>${esc(it.title)}</b>${it.author?`・${esc(it.author)}`:""} ${it.have?`<em class="hint">（已在館藏）</em>`:""}</span><small>${esc(it.why)} <a href="https://search.books.com.tw/search/query/key/${encodeURIComponent(it.title)}/cat/all" target="_blank" rel="noopener">博客來確認 ↗</a> <a href="${tpml(it.title)}" target="_blank" rel="noopener" data-copy="${esc(it.title)}">北市圖館藏 ↗</a></small></label>`).join("")}</div>
-    <div class="row" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn primary mini" data-addpicked="${esc(sp.key)}">列入館藏</button><span class="hint">AI 建議可能有誤，列入前可點博客來確認書名與作者。</span></div>`;
+  else if(sg?.state==="ok")inner=`${sg.note?`<p class="hint">${esc(sg.note)}</p>`:""}<div class="sugg">${sg.items.map((it,i)=>`<label><input type="checkbox" data-pick="${esc(sp.key)}" data-i="${i}" ${it.pick?"checked":""} ${it.have?"disabled":""}><span><b>${esc(it.title)}</b>${it.author?`・${esc(it.author)}`:""} ${it.have?`<em class="hint">（已在館藏）</em>`:""}</span><small>${it.why?esc(it.why)+" ":""}<a href="${tpml(it.title)}" target="_blank" rel="noopener" data-copy="${esc(it.title)}">北市圖館藏 ↗</a> <a href="${bkUrl(it.title)}" target="_blank" rel="noopener">博客來 ↗</a></small></label>`).join("")}</div>
+    <div class="row" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn primary mini" data-addpicked="${esc(sp.key)}">列入館藏</button><span class="hint">${sg.builtin?"勾選想要的書再列入館藏；點北市圖可查哪裡借得到，點博客來可看書目。":"AI 建議可能有誤，列入前可點博客來確認書名與作者。"}</span></div>
+    <form class="addrow addbook" data-spec="${esc(sp.key)}"><input maxlength="40" placeholder="自己加一本書的書名" aria-label="自己加一本書到${esc(sp.name)}"><button class="btn mini" type="submit">加入館藏</button></form>`;
   return `<div class="spec" style="--c:${sp.color}"><div class="spec-h"><b><i></i>${esc(sp.name)}</b><span class="sp hint">館藏 ${count} 本</span>
-    <button class="btn mini" data-suggest="${esc(sp.key)}" ${sg?.state==="loading"?"disabled":""}>${sg?.state==="ok"?"換一批書單":"AI 建議書單"}</button>
+    <button class="btn mini" data-suggest="${esc(sp.key)}" ${sg?.state==="loading"?"disabled":""}>${!sample?"推薦書單":sg?.state==="ok"?"換一批書單":"AI 建議書單"}</button>
     <button class="btn mini" data-rmspec="${esc(sp.key)}" aria-label="移除 ${esc(sp.name)}">移除書區</button></div>${inner}</div>`;
 }
 function renderBuild(){
@@ -796,10 +842,10 @@ function renderBuild(){
       ${PRESETS[L.theme.key]?"":`<span class="chip" style="--c:${L.theme.color}" aria-pressed="true"><i></i>${esc(L.theme.name)}</span>`}</div></div>
     <form class="addrow" id="themeForm"><input id="themeIn" maxlength="12" placeholder="或自己輸入，例如：貓咪、台灣鐵道、失智照護" aria-label="自訂館藏特色"><button class="btn" type="submit">設為特色</button></form>
     <div class="field">專屬書區<div class="chips">${ZONE_IDEAS.filter(z=>!L.specs.some(s=>s.name===z)).map(z=>`<button class="chip" data-zoneidea="${esc(z)}">＋ ${esc(z)}</button>`).join("")}
-      <button class="chip" data-suggestzones="1" ${sgz?.state==="loading"?"disabled":""}>${sgz?.state==="loading"?"AI 思考中…":"AI 依特色建議書區"}</button></div></div>
+      <button class="chip" data-suggestzones="1" ${sgz?.state==="loading"?"disabled":""}>${!sample?"依特色建議書區":sgz?.state==="loading"?"AI 思考中…":"AI 依特色建議書區"}</button></div></div>
     ${sgz?.state==="ok"?`<div class="chips">${sgz.items.filter(z=>!L.specs.some(s=>s.name===z)).map(z=>`<button class="chip" data-zoneidea="${esc(z)}" style="border-color:var(--accent)">＋ ${esc(z)}</button>`).join("")}</div>`:sgz?.state==="err"?`<p class="note bad">${esc(sgz.msg)}</p>`:""}
     <form class="addrow" id="customForm"><input id="customSpec" maxlength="12" placeholder="自己輸入書區名稱，例如：翻譯文學" aria-label="自訂書區"><button class="btn" type="submit">開書區</button></form>
-    <div style="display:grid;gap:10px">${L.specs.map(specBlock).join("")||`<p class="hint">還沒有書區。開一個書區後，可以請 AI 推薦這區的書單。</p>`}</div>`;
+    <div style="display:grid;gap:10px">${L.specs.map(specBlock).join("")||`<p class="hint">還沒有書區。開一個書區後，可以從推薦書單挑這區的書。</p>`}</div>`;
   }
   if(k==="counter")body=`<h2>櫃檯長什麼樣子</h2><p class="lead">讀者走進門第一眼看到的地方。左邊已切到「館內」視角。</p>
     <div class="opts" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">${Object.entries(COUNTERS).map(([id,v])=>`<button class="opt" data-counter="${id}" aria-pressed="${L.counter===id}"><span class="price">${v.price}</span>${counterSVG(id,L.staff,true)}<b>${v.name}</b><small>${v.desc}</small></button>`).join("")}</div>`;
@@ -832,11 +878,11 @@ function renderOpen(){
         <div class="flt">${[["all",`全部 ${L.books.length}`],["toread",`待讀 ${cnt.toread}`],["ready",`可上架 ${cnt.ready}`],["shelved",`已上架 ${cnt.shelved}`]].map(([k,n])=>`<button class="chip" data-filter="${k}" aria-pressed="${bookFilter===k}">${n}</button>`).join("")}</div>
         <div class="books">${list.map(b=>{const sp=specOf(b.spec);return `<div class="bk" style="--c:${sp?.color||"#999"}">
           <input type="checkbox" data-read="${b.id}" ${b.read?"checked":""} ${b.shelved?"disabled":""} aria-label="讀完《${esc(b.title)}》">
-          <div class="t"><b>${esc(b.title)}</b><small>${esc(b.author||"")}${b.readAt?`・${esc(b.readAt)} 讀完`:""}・<a href="${tpml(b.title)}" target="_blank" rel="noopener" data-copy="${esc(b.title)}">北市圖館藏 ↗</a></small>
+          <div class="t"><b>${esc(b.title)}</b><small>${esc(b.author||"")}${b.readAt?`・${esc(b.readAt)} 讀完`:""}・<a href="${tpml(b.title)}" target="_blank" rel="noopener" data-copy="${esc(b.title)}">北市圖館藏 ↗</a> <a href="${bkUrl(b.title)}" target="_blank" rel="noopener">博客來 ↗</a></small>
             <select class="zsel" data-zone="${b.id}" aria-label="《${esc(b.title)}》的書區">${zoneOpts(b.spec)}</select></div>
-          ${b.shelved?`<span class="done">已上架</span>`:b.read?`<button class="btn primary mini" data-shelve="${b.id}">上架 +${SHELF_REWARD}</button>`:`<button class="x" data-rmbook="${b.id}" aria-label="從館藏移除">×</button>`}</div>`}).join("")||`<p class="hint">${L.books.length?"這個分類沒有書。":"館藏還是空的。到「特色與書區」請 AI 推薦書單，或在下面自己加一本。"}</p>`}</div>
+          ${b.shelved?`<span class="done">已上架</span>`:b.read?`<button class="btn primary mini" data-shelve="${b.id}">上架 +${SHELF_REWARD}</button>`:`<button class="x" data-rmbook="${b.id}" aria-label="從館藏移除">×</button>`}</div>`}).join("")||`<p class="hint">${L.books.length?"這個分類沒有書。":"館藏還是空的。到「特色與書區」打開推薦書單挑書，或在下面自己加一本。"}</p>`}</div>
         <form class="addrow" id="quickBook"><input id="qbTitle" maxlength="40" placeholder="自己加一本書的書名" aria-label="書名"><select id="qbZone" class="zsel" aria-label="放進哪個書區">${zoneOpts(L.specs[0]?.key||L.theme.key)}</select><button class="btn" type="submit">加入館藏</button></form>
-        <div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn mini" data-jump="3">新增書區或用 AI 書單擴充館藏</button></div>
+        <div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn mini" data-jump="3">新增書區或從推薦書單擴充館藏</button></div>
       </div>
       <div class="card"><h3>擴建</h3>
         <div class="coinline"><span class="coin"></span><b>${w}</b> 金幣可用</div>
@@ -933,6 +979,8 @@ document.addEventListener("submit",e=>{
   if(e.target.id==="themeForm"){const v=$("#themeIn").value.trim();if(!v)return $("#themeIn").focus();
     const pre=Object.entries(PRESETS).find(([,p])=>p[0]===v);
     L.theme=pre?{key:pre[0],name:v,color:pre[1][1]}:{key:"t-"+uid(),name:v,color:CUSTOM_COLORS[v.length%CUSTOM_COLORS.length]};delete sugg.__zones;persist();render();if(sample&&!L.specs.length)suggestZones()}
+  if(e.target.classList.contains("addbook")){const inp=e.target.querySelector("input"),v=inp.value.trim();if(!v)return inp.focus();
+    L.books.push({id:uid(),title:v,author:"",spec:e.target.dataset.spec,read:false,shelved:false});sugg[e.target.dataset.spec]?.items?.forEach(it=>{if(it.title===v){it.have=true;it.pick=false}});persist();render();toast("已加入館藏，讀完打勾就能上架")}
   if(e.target.id==="quickBook"){const v=$("#qbTitle").value.trim();if(!v)return $("#qbTitle").focus();L.books.push({id:uid(),title:v,author:"",spec:$("#qbZone").value,read:false,shelved:false});persist();render();toast("已加入館藏，讀完打勾就能上架")}
 });
 matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",()=>mount3D());

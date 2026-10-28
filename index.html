@@ -37,12 +37,13 @@
   --sky1:#1b2a4a; --sky2:#33476e; --win:#ffd36b; --sun:#f3efd8; color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6}
 .wrap{max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 56px}
 button,input{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.btn{border:1px solid var(--line);background:var(--panel);padding:10px 18px;border-radius:12px;font-weight:500;display:inline-flex;gap:6px;align-items:center;text-decoration:none;color:var(--ink)}
+.btn{border:1px solid var(--line);background:var(--panel);padding:10px 18px;min-height:44px;border-radius:12px;font-weight:500;display:inline-flex;gap:6px;align-items:center;justify-content:center;text-decoration:none;color:var(--ink);touch-action:manipulation}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
 .btn.big{font-size:18px;padding:14px 28px;border-radius:14px;font-family:var(--f-hand)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
@@ -58,46 +59,46 @@ button{cursor:pointer}
 .olist{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
 .ocard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:2px;min-width:0}
 .ocard b{font-family:var(--f-hand);font-size:17px}
-.ocard span{font-size:12.5px;color:var(--muted)}
+.ocard span{font-size:14px;color:var(--muted)}
 /* builder */
 .topbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:14px}
 .topbar h1{font-family:var(--f-hand);font-size:24px;margin:0}
-.coins{display:flex;align-items:center;gap:10px;font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:15px}
+.coins{display:flex;align-items:center;gap:10px;font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:17px}
 .coin{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ffe58a,#d99a12);box-shadow:inset 0 -2px 0 rgba(0,0,0,.2);flex:0 0 22px}
 .meter{width:150px;height:10px;border-radius:99px;background:var(--line);overflow:hidden}
 .meter i{display:block;height:100%;background:var(--coin);transition:width .3s}
 .coins.over{color:var(--bad)}.coins.over .meter i{background:var(--bad)}
 .steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.steps button{border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:5px 12px;font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.steps button{border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:6px 14px;min-height:44px;font-size:15px;flex:none;white-space:nowrap;touch-action:manipulation;color:var(--muted);display:flex;gap:6px;align-items:center}
 .steps button b{font-family:var(--f-mono);font-weight:500}
 .steps button[aria-current="step"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .steps button.done{color:var(--ink)}
 .build{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px;align-items:start}
-@media (max-width:860px){.build{grid-template-columns:1fr}}
+@media (max-width:860px){.build{grid-template-columns:minmax(0,1fr)}}
 .preview{position:sticky;top:calc(12px + env(safe-area-inset-top,0px));display:grid;gap:10px}
 @media (max-width:860px){.preview{position:static}}
 .stats{display:flex;flex-wrap:wrap;gap:8px}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
-.stat b{display:block;color:var(--ink);font-size:17px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 12px;font-size:14px;flex:none;color:var(--muted);font-variant-numeric:tabular-nums}
+.stat b{display:block;color:var(--ink);font-size:19px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:14px;min-width:0}
 .panel h2{font-family:var(--f-hand);font-size:26px;margin:0;line-height:1.2}
-.panel .lead{margin:-6px 0 0;color:var(--muted);font-size:14px}
+.panel .lead{margin:-6px 0 0;color:var(--muted);font-size:16px}
 .opts{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
 .opt{border:2px solid var(--line);background:var(--bg);border-radius:14px;padding:10px;text-align:left;display:grid;gap:4px;min-width:0;position:relative}
 .opt svg{width:100%;height:auto;border-radius:8px;display:block}
-.opt b{font-size:15px}
-.opt small{color:var(--muted);font-size:12.5px;line-height:1.4}
-.opt .price{position:absolute;top:8px;right:8px;font-family:var(--f-mono);font-size:11.5px;background:var(--panel);border-radius:99px;padding:1px 7px;display:flex;align-items:center;gap:4px}
+.opt b{font-size:17px}
+.opt small{color:var(--muted);font-size:14px;line-height:1.4}
+.opt .price{position:absolute;top:8px;right:8px;font-family:var(--f-mono);font-size:13px;background:var(--panel);border-radius:99px;padding:1px 7px;display:flex;align-items:center;gap:4px}
 .opt .price::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--coin)}
 .opt[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,var(--panel))}
-.opt .fit{font-size:11.5px;color:var(--good);font-weight:700}
-.field{display:grid;gap:5px;font-size:13px;color:var(--muted)}
+.opt .fit{font-size:13px;color:var(--good);font-weight:700}
+.field{display:grid;gap:6px;font-size:15px;color:var(--muted)}
 .field input[type=text]{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);font-family:var(--f-hand);width:100%}
 .stepper{display:flex;align-items:center;gap:12px}
-.stepper button{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-size:22px;line-height:1}
+.stepper button{width:48px;height:48px;touch-action:manipulation;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-size:22px;line-height:1}
 .stepper output{font-family:var(--f-hand);font-size:34px;min-width:2.2em;text-align:center;font-variant-numeric:tabular-nums}
-.stepper span{color:var(--muted);font-size:13px}
-.note{font-size:13px;padding:8px 12px;border-radius:10px;background:var(--bg);border-left:3px solid var(--coin)}
+.stepper span{color:var(--muted);font-size:14px}
+.note{font-size:15px;padding:8px 12px;border-radius:10px;background:var(--bg);border-left:3px solid var(--coin)}
 .note.bad{border-left-color:var(--bad);color:var(--bad)}
 .nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 /* opening */
@@ -110,48 +111,59 @@ button{cursor:pointer}
 .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:10px;min-width:0}
 .card h3{font-family:var(--f-hand);font-size:20px;margin:0}
-dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:16px}
 dt{color:var(--muted)}dd{margin:0;min-width:0}
-.tips{margin:0;padding-left:20px;display:grid;gap:4px;font-size:14px}
+.tips{margin:0;padding-left:20px;display:grid;gap:4px;font-size:16px}
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:40}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;max-width:calc(100% - 32px)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:15px;max-width:calc(100% - 32px)}
 @keyframes rise{from{transform:translateY(16px);opacity:.3}to{transform:none;opacity:1}}
 .pop{animation:rise .35s ease-out}
 @media (prefers-reduced-motion:reduce){.pop{animation:none}}
 .stage3d{position:relative;width:100%;aspect-ratio:16/10;border-radius:16px;overflow:hidden;background:var(--sky1);box-shadow:0 14px 30px -18px rgba(0,0,0,.5);touch-action:none}
+.stage3d.touch{touch-action:pan-y}.stage3d.touch canvas{touch-action:pan-y}.stage3d.touch.rotating,.stage3d.touch.rotating canvas{touch-action:none}
+.stage3d.rotating{outline:3px solid var(--accent);outline-offset:-3px}
 .stage3d canvas{display:block;width:100%!important;height:100%!important;cursor:grab}
 .stage3d canvas:active{cursor:grabbing}
 .stage3d .scene{border-radius:0;box-shadow:none;height:100%}
 .viewbar{position:absolute;left:10px;top:10px;display:flex;gap:4px;background:rgba(255,255,255,.85);border-radius:10px;padding:3px}
-.viewbar button{border:0;background:none;padding:5px 10px;border-radius:8px;font-size:13px;color:#25292b}
+.viewbar button{border:0;background:none;padding:5px 12px;min-height:40px;border-radius:8px;font-size:15px;color:#25292b;touch-action:manipulation}
+.rotbtn{position:absolute;right:10px;top:10px;border:0;border-radius:10px;background:rgba(255,255,255,.88);color:#25292b;font-size:15px;padding:5px 12px;min-height:44px;touch-action:manipulation}
+.rotbtn[aria-pressed="true"]{background:#25292b;color:#fff}
 .viewbar button[aria-pressed="true"]{background:#25292b;color:#fff}
-.hint3d{position:absolute;right:10px;bottom:8px;font-size:11.5px;color:#25292b;background:rgba(255,255,255,.75);padding:2px 8px;border-radius:99px}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:5px 12px;font-size:13.5px;display:inline-flex;gap:6px;align-items:center}
+.hint3d{position:absolute;right:10px;bottom:8px;font-size:13px;color:#25292b;background:rgba(255,255,255,.75);padding:2px 8px;border-radius:99px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:6px 14px;min-height:44px;font-size:16px;display:inline-flex;gap:6px;align-items:center;touch-action:manipulation}
 .chip i{width:10px;height:10px;border-radius:50%;background:var(--c)}
 .chip[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--panel));font-weight:700}
-.chip .fit{font-size:11px;color:var(--good)}
-.addrow{display:flex;gap:8px}
-.addrow input{flex:1;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:9px 12px;font-size:15px;color:var(--ink)}
+.chip .fit{font-size:13px;color:var(--good)}
+.addrow{display:flex;flex-wrap:wrap;gap:8px}
+.addrow input{flex:1 1 220px;min-width:0;width:0;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 12px;min-height:46px;font-size:17px;color:var(--ink)}
+.addrow .btn{flex:none}
 .spec{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:8px;background:var(--bg)}
 .spec-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.spec-h b{font-family:var(--f-hand);font-size:18px;display:flex;gap:6px;align-items:center}
+.spec-h b{font-family:var(--f-hand);font-size:20px;display:flex;gap:6px;align-items:center}
 .spec-h b i{width:12px;height:12px;border-radius:3px;background:var(--c)}
 .spec-h .sp{flex:1}
 .sugg{display:grid;gap:4px}
-.sugg label{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;align-items:start;font-size:14px;padding:6px 8px;border-radius:8px;background:var(--panel)}
-.sugg label small{grid-column:2;color:var(--muted);font-size:12.5px}
-.sugg a{color:var(--accent);font-size:12px}
-.mini{font-size:12.5px;padding:5px 10px;border-radius:8px}
+.srow{display:grid;gap:2px;padding:4px 8px 8px;border-radius:10px;background:var(--panel)}
+.sugg label{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:center;font-size:16px;padding:6px 0;min-height:44px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sugg label input{width:24px;height:24px;margin:0;accent-color:var(--good)}
+.srow small{color:var(--muted);font-size:14px;padding-left:34px}
+.lnks{display:flex;flex-wrap:wrap;gap:6px;padding-left:34px}
+.lnk{display:inline-flex;align-items:center;min-height:36px;padding:4px 12px;border:1px solid var(--line);border-radius:99px;color:var(--accent);font-size:14px;text-decoration:none;background:var(--bg)}
+.mini{font-size:15px;padding:6px 12px;border-radius:10px}
 .books{display:grid;gap:6px;max-height:460px;overflow-y:auto;padding-right:2px}
-.bk{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--bg);border-left:4px solid var(--c)}
+.bk{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 8px;align-items:center;min-height:44px;padding:8px 10px;border-radius:10px;background:var(--bg);border-left:4px solid var(--c)}
 .bk .t{min-width:0}
-.bk .t b{display:block;font-size:14.5px;overflow-wrap:anywhere}
-.bk .t small{color:var(--muted);font-size:12px}
-.bk input[type=checkbox]{width:20px;height:20px;accent-color:var(--good)}
-.bk .done{font-size:12px;color:var(--good);font-weight:700;white-space:nowrap}
-.bk .x{border:0;background:none;color:var(--muted);font-size:16px;padding:2px 6px}
-.earn{font-family:var(--f-mono);font-size:12.5px}
+.bk .t b{display:block;font-size:17px;overflow-wrap:anywhere}
+.bk .t small{color:var(--muted);font-size:14px}
+.bk .ck{display:grid;place-items:center;width:44px;height:44px;margin:-6px -4px;cursor:pointer}
+.bk .bx{grid-column:2/-1;display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-width:0}
+.bk .bx .lnks{padding-left:0}
+.bk input[type=checkbox]{width:24px;height:24px;margin:0;accent-color:var(--good)}
+.bk .done{font-size:14px;color:var(--good);font-weight:700;white-space:nowrap}
+.bk .x{border:0;background:none;color:var(--muted);font-size:20px;width:44px;height:44px;padding:0;touch-action:manipulation}
+.earn{font-family:var(--f-mono);font-size:14px}
 .coinline{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:18px;font-variant-numeric:tabular-nums}
 .expand{display:grid;gap:12px}
 .exrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -164,37 +176,61 @@ dt{color:var(--muted)}dd{margin:0;min-width:0}
 @media (max-width:640px){.open .stage3d{aspect-ratio:4/3}}
 
 .lot{display:grid;gap:6px;justify-items:center;background:var(--panel);border:2px dashed var(--accent);border-radius:16px;padding:16px 22px;max-width:640px;width:100%}
-.lot span{color:var(--muted);font-size:13px;letter-spacing:.1em}
+.lot span{color:var(--muted);font-size:14px;letter-spacing:.1em}
 .lot b{font-family:var(--f-hand);font-size:clamp(26px,5vw,36px);line-height:1.2}
-.lot small{color:var(--muted);font-size:13.5px}
+.lot small{color:var(--muted);font-size:15px}
 .reader{display:flex;gap:14px;align-items:flex-start}
 .face{flex:0 0 56px;height:56px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#f2c9a0 0 34%,transparent 35%),var(--c);box-shadow:inset 0 -6px 0 rgba(0,0,0,.12)}
 .bubble{position:relative;background:var(--bg);border-radius:14px;padding:12px 14px;font-family:var(--f-hand);font-size:20px;line-height:1.4;min-width:0;display:grid;gap:4px}
-.bubble small{font-family:var(--f-body);font-size:13px;color:var(--muted)}
+.bubble small{font-family:var(--f-body);font-size:14px;color:var(--muted)}
 .pbar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
 .pbar i{display:block;height:100%;width:100%;background:var(--good)}
 .answers{display:grid;gap:8px}
-.answers .btn{justify-content:flex-start;text-align:left;font-size:15px}
+.answers .btn{justify-content:flex-start;text-align:left;font-size:17px;min-height:50px}
 .answers .btn.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 15%,var(--panel));opacity:1}
 .answers .btn.dim{opacity:.4}
 .btn.danger{color:var(--bad);border-color:currentColor;background:transparent}
-.zsel{margin-top:4px;max-width:100%;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:3px 6px;font-size:12.5px}
-#quickBook .zsel{margin:0;font-size:14px}
+.zsel{margin-top:4px;max-width:100%;min-width:0;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:6px 8px;min-height:40px;font-size:16px}
+#quickBook .zsel{margin:0;flex:1 1 140px;min-height:46px}
 .bk .t a{color:var(--accent)}
 #resetWrap{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}
 
 .catcard{position:relative;background:#fffbea;color:#2b2610;border:1px solid #e4d9b0;border-radius:6px;padding:16px 18px 14px 18px;display:grid;gap:4px;box-shadow:0 6px 14px -8px rgba(0,0,0,.3);background-image:repeating-linear-gradient(transparent 0 27px,#c9dcef 27px 28px);background-position:0 18px}
 .catcard::before{content:"";position:absolute;left:0;right:0;top:44px;height:1px;background:#e58c8c}
 .catcard b{font-family:var(--f-hand);font-size:22px;line-height:1.3;padding-right:20px}
-.catcard span{font-size:13.5px;color:#5c5530}
-.catcard p{margin:6px 0 0;font-size:14.5px;line-height:1.9}
-.catcard a{font-size:12.5px;color:#2f56c4;justify-self:start}
+.catcard span{font-size:15px;color:#5c5530}
+.catcard p{margin:6px 0 0;font-size:16px;line-height:1.75}
+.catcard a{font-size:14px;color:#2f56c4;justify-self:start}
+.catcard .lnk{color:#2f56c4;background:#fff;border-color:#c9dcef}
 .catcard .hole{position:absolute;bottom:10px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--panel);border:1px solid #e4d9b0}
 .loadbar{width:40%!important;animation:load 1.2s ease-in-out infinite alternate}
 @keyframes load{from{margin-left:0}to{margin-left:60%}}
+.hint{color:var(--muted);font-size:15px}
+#actionbar{display:none}
+@media (max-width:600px){
+  .wrap{padding-block:14px 40px}
+  .steps{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px;overscroll-behavior-x:contain}
+  .steps::-webkit-scrollbar,.stats::-webkit-scrollbar{display:none}
+  .stats{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain}
+  .stage3d{aspect-ratio:16/9}
+  .open .stage3d{aspect-ratio:16/10}
+  .panel{padding:16px}
+  .books{max-height:none;overflow:visible}
+  .zsel{min-height:44px}
+  .lnk{min-height:40px}
+  body.has-bar .wrap{padding-bottom:calc(104px + env(safe-area-inset-bottom,0px))}
+  body.has-bar .panel .nav,body.has-bar .navdup{display:none}
+  body.has-bar .toast{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+  body.has-bar #actionbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;gap:8px;
+    padding:10px max(12px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));
+    background:color-mix(in srgb,var(--panel) 94%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid var(--line);box-shadow:0 -8px 20px -14px rgba(0,0,0,.4)}
+  #actionbar .btn{flex:1 1 0;min-width:0;min-height:50px;font-size:17px;padding:8px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #actionbar .btn.primary{flex-grow:1.6}
+}
 </style>
 
 <div class="wrap" id="app"></div>
+<nav id="actionbar" aria-label="主要操作"></nav>
 <canvas class="confetti" id="confetti" hidden></canvas>
 <div class="toast" id="toast" hidden></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -363,20 +399,26 @@ function evaluate(x){
 }
 
 /* ===== 3D ===== */
-const G3={ok:false};
+const G3={ok:false,frames:0,visible:true};
+// 觸控裝置：單指上下滑交給頁面捲動，按「轉動」才用手指旋轉；手機降低繪圖負擔
+const TOUCH=matchMedia("(pointer:coarse)").matches||navigator.maxTouchPoints>0;
+const LITE=TOUCH||matchMedia("(max-width:600px)").matches;
+let rot3d=false;
 function init3D(){
   if(G3.tried)return G3.ok;G3.tried=true;
   try{
     if(!window.THREE)return false;
-    const r=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:false});
-    r.setPixelRatio(Math.min(2,devicePixelRatio||1));r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFSoftShadowMap;
+    const r=new THREE.WebGLRenderer({antialias:!LITE,preserveDrawingBuffer:false,powerPreference:LITE?"low-power":"default"});
+    r.setPixelRatio(Math.min(LITE?1.5:2,devicePixelRatio||1));r.shadowMap.enabled=true;r.shadowMap.type=LITE?THREE.PCFShadowMap:THREE.PCFSoftShadowMap;
     const scene=new THREE.Scene();const cam=new THREE.PerspectiveCamera(40,1.6,0.1,400);
     const ctl=THREE.OrbitControls?new THREE.OrbitControls(cam,r.domElement):null;
     if(ctl){ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.maxPolarAngle=1.48;ctl.minDistance=8;ctl.maxDistance=70;ctl.autoRotate=true;ctl.autoRotateSpeed=.6;ctl.addEventListener("start",()=>ctl.autoRotate=false)}
     Object.assign(G3,{ok:true,r,scene,cam,ctl,sig:"",mode:"",flags:[]});
     const ro=new ResizeObserver(()=>resize3D());G3.ro=ro;
+    // 舞台捲出畫面或分頁在背景時暫停繪圖
+    G3.io=window.IntersectionObserver?new IntersectionObserver(es=>{const e=es[es.length-1];if(e.target===G3.host)G3.visible=e.isIntersecting}):null;
     const t0=performance.now();
-    (function loop(){requestAnimationFrame(loop);if(!G3.r.domElement.isConnected)return;const t=(performance.now()-t0)/1000;G3.flags.forEach((f,i)=>f.rotation.y=Math.sin(t*1.6+i)*.25);ctl?.update();r.render(scene,cam)})();
+    (function loop(){requestAnimationFrame(loop);if(!G3.r.domElement.isConnected||!G3.visible||document.hidden)return;const t=(performance.now()-t0)/1000;G3.flags.forEach((f,i)=>f.rotation.y=Math.sin(t*1.6+i)*.25);ctl?.update();r.render(scene,cam);G3.frames++})();
     return true;
   }catch(e){G3.ok=false;return false}
 }
@@ -388,6 +430,8 @@ function mount3D(){
   host.setAttribute("aria-label",label);
   if(!init3D()){host.innerHTML=view3d==="in"?counterSVG(L.counter,L.staff):sceneSVG(L);return}
   host.prepend(G3.r.domElement);G3.host=host;G3.ro.disconnect();G3.ro.observe(host);resize3D();
+  if(G3.io){G3.io.disconnect();G3.visible=true;G3.io.observe(host)}
+  if(G3.ctl)G3.ctl.enabled=!TOUCH||rot3d;
   const sig=JSON.stringify([view3d,L.loc,L.facade,L.floors,L.staff,L.specs,L.theme,L.counter,libName(L),shelved(L),isDark()]);
   if(sig!==G3.sig){const modeChanged=G3.mode!==view3d||G3.floorsSeen!==L.floors;G3.sig=sig;build3D(modeChanged);G3.mode=view3d;G3.floorsSeen=L.floors}
 }
@@ -437,7 +481,7 @@ function lights3D(night,interior){
   s.background=new THREE.Color(night?"#1b2a4a":"#bfe3f5");s.fog=interior?null:new THREE.Fog(night?"#1b2a4a":"#d8eef7",55,140);
   s.add(new THREE.HemisphereLight(night?"#6a7fb0":"#ffffff",night?"#26303a":"#8a7a5a",interior?.45:(night?.55:.75)));
   const d=new THREE.DirectionalLight(night?"#b8c8ff":"#fff3dc",interior?.5:(night?.45:1));d.position.set(14,26,18);d.castShadow=true;
-  d.shadow.mapSize.set(2048,2048);Object.assign(d.shadow.camera,{left:-30,right:30,top:30,bottom:-30,near:1,far:80});d.shadow.bias=-.0005;s.add(d);
+  d.shadow.mapSize.set(LITE?1024:2048,LITE?1024:2048);Object.assign(d.shadow.camera,{left:-30,right:30,top:30,bottom:-30,near:1,far:80});d.shadow.bias=-.0005;s.add(d);
   if(night||interior){const p=new THREE.PointLight("#ffd9a0",interior?.5:.6,40);p.position.set(0,interior?6:3,interior?4:8);s.add(p)}
 }
 function build3D(resetCam){
@@ -772,7 +816,7 @@ function renderShift(){
     <section class="panel pop">
       <div class="row" style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="hint">第 ${s.i+1} / ${s.items.length} 本</span><span class="hint">館藏特色：${esc(L.theme.name)}</span></div>
       <article class="catcard"><b>${esc(it.title)}</b><span>${esc(it.author)}${it.year?`・${esc(it.year)}`:""}</span><p>${esc(it.desc)}</p>
-        <span><a href="https://search.books.com.tw/search/query/key/${encodeURIComponent(it.title)}/cat/all" target="_blank" rel="noopener">博客來書目 ↗</a> <a href="${tpml(it.title)}" target="_blank" rel="noopener" data-copy="${esc(it.title)}">北市圖館藏 ↗</a></span></article>
+        <span class="lnks" style="padding-left:0"><a class="lnk" href="https://search.books.com.tw/search/query/key/${encodeURIComponent(it.title)}/cat/all" target="_blank" rel="noopener">博客來書目 ↗</a><a class="lnk" href="${tpml(it.title)}" target="_blank" rel="noopener" data-copy="${esc(it.title)}">北市圖館藏 ↗</a></span></article>
       <div class="answers">${zones.map((z,i)=>`<button class="btn ${s.fb?(z.key===chosenRight?"right":"dim"):""}" data-ans="${i}" ${s.fb?"disabled":""} style="border-left:5px solid ${z.color}">放進「${esc(z.name)}」</button>`).join("")}
         <button class="btn ${s.fb?(chosenRight===null?"right":"dim"):""}" data-ans="-1" ${s.fb?"disabled":""}>不列入館藏</button></div>
       ${s.fb?`<p class="note ${s.fb.ok?"":"bad"}">${esc(s.fb.text)}${s.fb.ok?` +${s.fb.gain} 金幣${s.streak>1?`（連續 ${s.streak} 本）`:""}`:""}${s.fb.added?"・已列入館藏":""}</p>
@@ -784,12 +828,41 @@ function renderShift(){
 }
 
 /* ===== screens ===== */
-function stageHTML(){return `<div class="stage3d" id="stage" role="img"><div class="viewbar"><button data-view="out" aria-pressed="${view3d==="out"}">外觀</button><button data-view="in" aria-pressed="${view3d==="in"}">館內</button></div><span class="hint3d">拖曳旋轉・滾輪縮放</span></div>`}
+function stageHTML(){
+  const hint=!TOUCH?"拖曳旋轉・滾輪縮放":rot3d?"單指旋轉・雙指縮放":"按「轉動」用手指轉";
+  return `<div class="stage3d${TOUCH?" touch":""}${TOUCH&&rot3d?" rotating":""}" id="stage" role="img"><div class="viewbar"><button data-view="out" aria-pressed="${view3d==="out"}">外觀</button><button data-view="in" aria-pressed="${view3d==="in"}">館內</button></div>${TOUCH?`<button class="rotbtn" data-rot="1" aria-pressed="${rot3d}">${rot3d?"完成":"轉動"}</button>`:""}<span class="hint3d">${hint}</span></div>`}
 function coinsHTML(x){const w=wallet(x);return `<div class="coins ${w<0?"over":""}"><span class="coin"></span><span>${w} 金幣</span></div>`}
+let lastKey="";
 function render(){
   if(screen==="intro")renderIntro();else if(screen==="open")renderOpen();else if(screen==="draw")renderDraw();else if(screen==="shift")renderShift();else renderBuild();
+  // 同一個畫面裡的更新不重播進場動畫
+  const key=[screen,step,shift?`${shift.i}|${!!shift.done}|${!!shift.loading}|${!!shift.empty}`:"",drawing].join("/");
+  if(key===lastKey)document.querySelectorAll("#app .pop").forEach(e=>e.classList.remove("pop"));
+  lastKey=key;
   if(screen==="draw"&&drawn){const keep=L;L=drawn;mount3D();L=keep}else mount3D();
+  renderBar();
 }
+/* 手機底部操作列（600px 以下才顯示） */
+function pickedCount(){let n=0;[L.theme,...L.specs].forEach(sp=>{const sg=sp&&sugg[sp.key];if(sg?.items)sg.items.forEach(it=>{if(it.pick&&!it.have)n++})});return n}
+function barHTML(){
+  if(screen==="build"){
+    const k=STEPS[step][0],last=step===STEPS.length-1,w=wallet(L);
+    const prev=`<button class="btn" data-nav="-1">${step?"上一步":(L.opened?"回館長室":"回入口")}</button>`;
+    const next=last?`<button class="btn primary" data-nav="open" ${w<0?"disabled":""}>${L.opened?"完成裝修":"剪綵開幕"}</button>`:`<button class="btn primary" data-nav="1">下一步</button>`;
+    const listOpen=k==="spec"&&L.specs.some(sp=>sugg[sp.key]?.state==="ok");
+    if(listOpen){const n=pickedCount();return `<button class="btn ${n?"primary":""}" data-addpicked="__all" ${n?"":"disabled"}>列入館藏（已選 ${n} 本）</button>${next.replace("btn primary","btn"+(n?"":" primary"))}`}
+    return prev+next;
+  }
+  if(screen==="open")return `<button class="btn" data-go="build">重新裝修</button><button class="btn primary" data-work="1">上班：整理新書</button>`;
+  if(screen==="shift"&&shift){
+    const s=shift;if(s.loading)return "";
+    if(s.empty)return `<button class="btn" data-go="open">回館長室</button><button class="btn primary" data-jump="3">去加館藏</button>`;
+    if(s.done)return `<button class="btn" data-go="open">回館長室</button><button class="btn primary" data-work="1">再整理一車</button>`;
+    return `<button class="btn" data-quitshift="1">提早下班</button>${s.fb?`<button class="btn primary" data-nextitem="1">${s.i+1>=s.items.length?"下班":"下一本"}</button>`:""}`;
+  }
+  return "";
+}
+function renderBar(){const b=$("#actionbar");if(!b)return;const h=barHTML();b.innerHTML=h;document.body.classList.toggle("has-bar",!!h)}
 function renderIntro(){
   const own=L.opened;const ids=Object.keys(others);
   if(!own){view3d="out"}
@@ -816,7 +889,7 @@ function specBlock(sp){
   let inner="";
   if(sg?.state==="loading")inner=`<p class="hint">正在請 AI 挑選「${esc(sp.name)}」的書單…</p>`;
   else if(sg?.state==="err")inner=`<p class="note bad">${esc(sg.msg)}</p>`;
-  else if(sg?.state==="ok")inner=`${sg.note?`<p class="hint">${esc(sg.note)}</p>`:""}<div class="sugg">${sg.items.map((it,i)=>`<label><input type="checkbox" data-pick="${esc(sp.key)}" data-i="${i}" ${it.pick?"checked":""} ${it.have?"disabled":""}><span><b>${esc(it.title)}</b>${it.author?`・${esc(it.author)}`:""} ${it.have?`<em class="hint">（已在館藏）</em>`:""}</span><small>${it.why?esc(it.why)+" ":""}<a href="${tpml(it.title)}" target="_blank" rel="noopener" data-copy="${esc(it.title)}">北市圖館藏 ↗</a> <a href="${bkUrl(it.title)}" target="_blank" rel="noopener">博客來 ↗</a></small></label>`).join("")}</div>
+  else if(sg?.state==="ok")inner=`${sg.note?`<p class="hint">${esc(sg.note)}</p>`:""}<div class="sugg">${sg.items.map((it,i)=>`<div class="srow"><label><input type="checkbox" data-pick="${esc(sp.key)}" data-i="${i}" ${it.pick?"checked":""} ${it.have?"disabled":""}><span><b>${esc(it.title)}</b>${it.author?`・${esc(it.author)}`:""} ${it.have?`<em class="hint">（已在館藏）</em>`:""}</span></label>${it.why?`<small>${esc(it.why)}</small>`:""}<span class="lnks"><a class="lnk" href="${tpml(it.title)}" target="_blank" rel="noopener" data-copy="${esc(it.title)}">北市圖館藏 ↗</a><a class="lnk" href="${bkUrl(it.title)}" target="_blank" rel="noopener">博客來 ↗</a></span></div>`).join("")}</div>
     <div class="row" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn primary mini" data-addpicked="${esc(sp.key)}">列入館藏</button><span class="hint">${sg.builtin?"勾選想要的書再列入館藏；點北市圖可查哪裡借得到，點博客來可看書目。":"AI 建議可能有誤，列入前可點博客來確認書名與作者。"}</span></div>
     <form class="addrow addbook" data-spec="${esc(sp.key)}"><input maxlength="40" placeholder="自己加一本書的書名" aria-label="自己加一本書到${esc(sp.name)}"><button class="btn mini" type="submit">加入館藏</button></form>`;
   return `<div class="spec" style="--c:${sp.color}"><div class="spec-h"><b><i></i>${esc(sp.name)}</b><span class="sp hint">館藏 ${count} 本</span>
@@ -877,10 +950,10 @@ function renderOpen(){
       <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h3>館藏：讀完打勾才能上架</h3><span class="earn">每上架 1 本 +${SHELF_REWARD} 金幣</span></div>
         <div class="flt">${[["all",`全部 ${L.books.length}`],["toread",`待讀 ${cnt.toread}`],["ready",`可上架 ${cnt.ready}`],["shelved",`已上架 ${cnt.shelved}`]].map(([k,n])=>`<button class="chip" data-filter="${k}" aria-pressed="${bookFilter===k}">${n}</button>`).join("")}</div>
         <div class="books">${list.map(b=>{const sp=specOf(b.spec);return `<div class="bk" style="--c:${sp?.color||"#999"}">
-          <input type="checkbox" data-read="${b.id}" ${b.read?"checked":""} ${b.shelved?"disabled":""} aria-label="讀完《${esc(b.title)}》">
-          <div class="t"><b>${esc(b.title)}</b><small>${esc(b.author||"")}${b.readAt?`・${esc(b.readAt)} 讀完`:""}・<a href="${tpml(b.title)}" target="_blank" rel="noopener" data-copy="${esc(b.title)}">北市圖館藏 ↗</a> <a href="${bkUrl(b.title)}" target="_blank" rel="noopener">博客來 ↗</a></small>
-            <select class="zsel" data-zone="${b.id}" aria-label="《${esc(b.title)}》的書區">${zoneOpts(b.spec)}</select></div>
-          ${b.shelved?`<span class="done">已上架</span>`:b.read?`<button class="btn primary mini" data-shelve="${b.id}">上架 +${SHELF_REWARD}</button>`:`<button class="x" data-rmbook="${b.id}" aria-label="從館藏移除">×</button>`}</div>`}).join("")||`<p class="hint">${L.books.length?"這個分類沒有書。":"館藏還是空的。到「特色與書區」打開推薦書單挑書，或在下面自己加一本。"}</p>`}</div>
+          <label class="ck"><input type="checkbox" data-read="${b.id}" ${b.read?"checked":""} ${b.shelved?"disabled":""} aria-label="讀完《${esc(b.title)}》"></label>
+          <div class="t"><b>${esc(b.title)}</b><small>${esc(b.author||"")}${b.readAt?`${b.author?"・":""}${esc(b.readAt)} 讀完`:""}</small></div>
+          ${b.shelved?`<span class="done">已上架</span>`:b.read?`<button class="btn primary mini" data-shelve="${b.id}">上架 +${SHELF_REWARD}</button>`:`<button class="x" data-rmbook="${b.id}" aria-label="從館藏移除">×</button>`}
+          <div class="bx"><span class="lnks"><a class="lnk" href="${tpml(b.title)}" target="_blank" rel="noopener" data-copy="${esc(b.title)}">北市圖館藏 ↗</a><a class="lnk" href="${bkUrl(b.title)}" target="_blank" rel="noopener">博客來 ↗</a></span><select class="zsel" data-zone="${b.id}" aria-label="《${esc(b.title)}》的書區">${zoneOpts(b.spec)}</select></div></div>`}).join("")||`<p class="hint">${L.books.length?"這個分類沒有書。":"館藏還是空的。到「特色與書區」打開推薦書單挑書，或在下面自己加一本。"}</p>`}</div>
         <form class="addrow" id="quickBook"><input id="qbTitle" maxlength="40" placeholder="自己加一本書的書名" aria-label="書名"><select id="qbZone" class="zsel" aria-label="放進哪個書區">${zoneOpts(L.specs[0]?.key||L.theme.key)}</select><button class="btn" type="submit">加入館藏</button></form>
         <div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn mini" data-jump="3">新增書區或從推薦書單擴充館藏</button></div>
       </div>
@@ -939,6 +1012,7 @@ document.addEventListener("click",async e=>{
   if(d.nextitem){nextItem();return}
   if(d.quitshift){if(shift&&shift.earned&&!shift.done){L.wages=(L.wages||0)+shift.earned;L.shifts=(L.shifts||0)+1;persist()}shift=null;screen="open";view3d="out";render();return}
   if(d.view){view3d=d.view;render();return}
+  if(d.rot){rot3d=!rot3d;render();return}
   if(d.go){clearInterval(shift?.timer);shift=null;screen=d.go;L.justOpened=false;if(d.go==="build"){step=0;view3d="out"}render();scrollTo(0,0);return}
   if(d.step!==undefined){step=+d.step;view3d=STEPS[step][0]==="counter"?"in":"out";render();return}
   if(d.jump){screen="build";step=+d.jump;view3d="out";render();scrollTo(0,0);return}
@@ -947,7 +1021,8 @@ document.addEventListener("click",async e=>{
     if(d.nav==="open"){const first=!L.opened;L.opened=true;L.justOpened=first;persist();screen="open";view3d="out";render();scrollTo(0,0);if(first)confetti();return}
     const n=step+(+d.nav);if(n<0){screen=L.opened?"open":"intro";render();return}step=Math.min(STEPS.length-1,n);view3d=STEPS[step][0]==="counter"?"in":"out";render();scrollTo({top:0,behavior:"smooth"});return}
   if(d.suggest){suggest(d.suggest);return}
-  if(d.addpicked){const sg=sugg[d.addpicked];if(!sg?.items)return;let n=0;sg.items.forEach(it=>{if(it.pick&&!it.have){L.books.push({id:uid(),title:it.title,author:it.author,spec:d.addpicked,read:false,shelved:false});it.have=true;it.pick=false;n++}});
+  if(d.addpicked){const keys=d.addpicked==="__all"?[L.theme,...L.specs].map(z=>z.key):[d.addpicked];let n=0;
+    keys.forEach(key=>{const sg=sugg[key];if(!sg?.items)return;sg.items.forEach(it=>{if(it.pick&&!it.have){L.books.push({id:uid(),title:it.title,author:it.author,spec:key,read:false,shelved:false});it.have=true;it.pick=false;n++}})});
     persist();toast(n?`已列入館藏 ${n} 本，開幕後讀完就能上架`:"沒有勾選新的書");render();return}
   if(d.loc)L.loc=d.loc;
   else if(d.facade)L.facade=d.facade;
@@ -968,7 +1043,7 @@ document.addEventListener("click",async e=>{
 document.addEventListener("change",e=>{
   const t=e.target;
   if(t.dataset.zone){const b=L.books.find(x=>x.id===t.dataset.zone);if(b){b.spec=t.value;persist();toast(`已把《${b.title}》移到「${specOf(t.value)?.name||""}」`);render()}return}
-  if(t.dataset.pick){const it=sugg[t.dataset.pick]?.items?.[+t.dataset.i];if(it)it.pick=t.checked}
+  if(t.dataset.pick){const it=sugg[t.dataset.pick]?.items?.[+t.dataset.i];if(it)it.pick=t.checked;renderBar()}
   if(t.dataset.read){const b=L.books.find(x=>x.id===t.dataset.read);if(!b||b.shelved)return;b.read=t.checked;b.readAt=t.checked?today():"";persist();render()}
 });
 document.addEventListener("submit",e=>{
